@@ -79,4 +79,4 @@ Render board, scoreboard, and hints message
 
 
 ## Wireframe ##
-![Here's my wireframe for CODENAMES](project1 wireframe.png)
+![Here's my wireframe for CODENAMES](img/project1%20wireframe.PNG)

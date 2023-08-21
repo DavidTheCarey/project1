@@ -1,0 +1,42 @@
+
+body {
+    text-align: center;
+}
+h2 {
+    display: inline;
+}
+input {
+    display: inline;
+}
+#grid {
+    display: grid;
+    grid-template-columns: repeat(5, 20vmin);
+    grid-template-rows: repeat(5, 10vmin);
+    gap: 5vmin;
+    margin-bottom: 3vmin;
+    margin-top: 3vmin;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#grid > div {
+    border: 0.1vmin solid red;
+    border-radius: 10%;
+    width: 170px;
+    height: 90px;
+}
+
+input {
+    display: inline;
+}
+
+#key {
+    position:fixed;
+    display: block; 
+    top: 0px;
+    right: 0px;
+    width: 300px;
+    height: 50px;
+}

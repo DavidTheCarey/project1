@@ -1,3 +1,5 @@
+# Project 1: CODENAMES #
+
 ## Pseudocode ##
 1. Define required constants
 - Define an object to track all the card value types (blue=1,red=-1,neutral=0,bomb=100)
@@ -77,6 +79,39 @@ Render board, scoreboard, and hints message
 8. Handle a player clicking the replay/new game button
 - Run init()
 
+## User Stories ##
+- As a user
+    - I want to be able to click on the cards on the grid
+        - To see if my team’s point is there
+    - I want to be able to check the key
+        - To help myself create clues for my team
+    - I want to see the current score
+        - So I can tell what choices to make based off how close i am to winning or losing
+    - I want to have a bunch of different random words and combinations
+        - So that I can have a varied game every time
+    - I want a replay button
+        - So that I can play the game again after I win/lose
+    - I want sound effects for clicking cards or buttons
+        - So that I can get good feedback when I input clicks
+    - I want the ability to pass my turn
+        - So that I don’t have to take risks if I’m not confident
+- As a software engineer
+    - I want to add event listeners for the cards you can click
+        - So that I can switch states of each card when clicked
+    - I want a button you can click or hover to present the key
+        - So that it becomes visible
+    - I want a large array of random words
+        - So that the card grid will remain varied each time its created
+    - I want a 5x5 grid of cards
+        - So I can print the randomized words onto them
+    - I want a team’s turn to end when they guess a neutral or enemy team’s card
+        - Because that’s how the game works
+    - I want to switch the players turn after they use up all their guess
+        - Because that’s how the game works
+    - I want the game to end when a team runs out of cards or the bomb is clicked
+        - Because that’s how the game works
+    - I want a button that skips to the next team's turn
+        - So that players can pass their turn if they want to
 
 ## Wireframe ##
 ![Here's my wireframe for CODENAMES](img/project1%20wireframe.PNG)

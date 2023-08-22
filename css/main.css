@@ -1,8 +1,19 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Open+Sans:wght@500&display=swap');
 body {
     text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgb(249, 204, 121);
 }
+
+h1 {
+    font-size: 78px;
+    font-family: 'Black Ops One', cursive;
+    margin-bottom: 20px;
+}
+
 h2 {
+    margin-top: -100px;
     display: inline;
 }
 input {
@@ -22,14 +33,21 @@ input {
 }
 
 #grid > div {
-    border: 0.1vmin solid red;
+    border: 0.4vmin solid grey;
     border-radius: 10%;
     width: 170px;
     height: 90px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px;   
+    font-size: 28px;
 }
 
 input {
     display: inline;
+    width: 30px;
+    height: 35px;
+    font-size: 26px;
 }
 
 #key {
@@ -39,4 +57,80 @@ input {
     right: 0px;
     width: 300px;
     height: 50px;
+    background-color: green;
+    color: white;
+    border: 0px;
+    font-size: 24px;
+}
+
+#key_board {
+    display: grid;
+    grid-template-columns: repeat(5, 1.7vmin);
+    grid-template-rows: repeat(5, 0.7vmin);
+    gap: 2.4vmin;
+    margin-bottom: 3vmin;
+    margin-top: 3vmin;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    right: 5%;
+    top: 5%;
+    z-index: 1;
+    
+
+}
+
+#key_board > div {
+    border: 0.4vmin solid grey;
+    width: 28px;
+    height: 21px;
+}
+
+#red {
+    display: grid;
+    float: right;
+    margin-right: 15%;
+    grid-template-columns: repeat(5, 3vmin);
+    grid-template-rows: repeat(2, 3vmin);
+}
+
+#blue {
+    display: grid;
+    float: left;
+    margin-left: 15%;
+    grid-template-columns: repeat(5, 3vmin);
+    grid-template-rows: repeat(2, 3vmin);
+    transform: scaleX(-1);
+}
+
+#red > div {
+    background-color: red;
+    width: 15px;
+    height: 15px;
+}
+
+#blue > div {
+    background-color: blue;
+    width: 15px;
+    height: 15px;
+}
+
+#new {
+    background-color: red;
+    color: white;
+    border: 0px;
+    width: 150px;
+    height: 50px;
+    font-size: 22px;
+    margin-right: 15px;
+}
+
+#pass {
+    background-color: green;
+    color: white;
+    border: 0px;
+    width: 150px;
+    height: 50px;
+    font-size: 22px;
+    margin-left: 15px;
 }

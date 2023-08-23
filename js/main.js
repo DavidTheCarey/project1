@@ -11,6 +11,13 @@ const CARD_VALUES = {
 
 }
 
+const SOUNDS = {
+    cardFlip: "https://cdn.freesound.org/previews/240/240776_4107740-lq.mp3",
+    backgroundMusic: "https://cdn.freesound.org/previews/683/683392_5479102-lq.mp3",
+    turnSwitch: "https://cdn.freesound.org/previews/270/270878_5141652-lq.mp3",
+    victory: "https://cdn.freesound.org/previews/414/414923_3359668-lq.mp3"
+}
+
 const RND_WORDS = [
     "Slap", "Ring", "Muscle", "Winner", "Baby", "Horse", "Water", "Mouse", "Phone",
     "Night", "Lesson", "Doctor", "Genius", "Soul", "Roast", "Fly", "Door", "Dinner", "Rain",
@@ -34,6 +41,8 @@ let turn;
 let winner;
 let blueArr = [];
 let redArr = [];
+let musicOn = true;
+let soundsOn = true;
 
 /*----- Cached Elements -----*/
 const cardEls = document.querySelectorAll("#grid > div");
@@ -49,6 +58,12 @@ const scoreRedEls = document.querySelectorAll("#red > div")
 const scoreBlueEls = document.querySelectorAll("#blue > div")
 const scoreboardBlue = document.getElementById("blue");
 const scoreboardRed = document.getElementById("red");
+const musicBtn = document.getElementById("music");
+const soundBtn = document.getElementById("sound");
+const flipSnd = new Audio();
+const backgroundMusic = new Audio();
+const turnSnd = new Audio();
+const victorySnd = new Audio();
 /*----- Event Listeneres -----*/
 boardEl.addEventListener("click", handleFlip, false);
 inputEl.addEventListener("input", updateHints);
@@ -72,50 +87,64 @@ keyBtn.addEventListener("click", () => {
         keyboardEl.style.display = "grid";
     }
 })
+musicBtn.addEventListener("click", () => {
+    if (musicOn){
+        musicOn = false;
+        musicBtn.style.backgroundColor = "darkgrey";
+    } else {
+        musicOn = true;
+        musicBtn.style.backgroundColor = "white";
+    }
+    initSounds();
+})
+soundBtn.addEventListener("click", () => {
+    if (soundsOn){
+        soundsOn = false;
+        soundBtn.style.backgroundColor = "darkgrey";
+    } else {
+        soundsOn = true;
+        soundBtn.style.backgroundColor = "white";
+    }
+    initSounds();
+})
 /*----- Functions -----*/
-
 init();
 
 function init(){
     
-    
     turn = (0.5 > Math.random() ? 1 : -1); //randomize who goes first
-    if (turn === 1){
-    scoreKeeper["-1"] = CARD_VALUES.redVal - 1;
-    scoreKeeper["1"] = CARD_VALUES.blueVal;
-    } else if (turn === -1){
-    scoreKeeper["1"] = CARD_VALUES.blueVal - 1;
-    scoreKeeper["-1"] = CARD_VALUES.redVal;
-    }
-    blueArr = [];
-    redArr = [];
-    for (let i = 0; i < scoreKeeper["1"]; i++){
-        blueArr.push(scoreBlueEls[i]);
-        scoreBlueEls[i].style.display = "inline";
-    } 
-    
-    for (let i = 0; i < scoreKeeper["-1"]; i++){
-        redArr.push(scoreRedEls[i]);
-        scoreRedEls[i].style.display = "inline";
-    } 
-
-    if (turn === 1){    //remove one from red for going second
-        
-            scoreRedEls[redArr.length].style.display = "none"; 
-            redArr.pop();
-        
-    }
-    else if (turn === -1){ //remove one from blue for going second
-        
-            scoreBlueEls[blueArr.length].style.display = "none"; 
-            blueArr.pop();
-        
-    }
-
+    setScore();
     createBoard();
     currentHints = 0;
     winner = null;
     render();
+    initSounds();
+}
+
+function setScore(){
+    blueArr = [];
+    redArr = [];
+    if (turn === 1){ // removes a point for team going second
+        scoreKeeper["-1"] = CARD_VALUES.redVal - 1;
+        scoreKeeper["1"] = CARD_VALUES.blueVal;
+    } else if (turn === -1){
+        scoreKeeper["1"] = CARD_VALUES.blueVal - 1;
+        scoreKeeper["-1"] = CARD_VALUES.redVal;
+    }
+    for (let i = 0; i < scoreKeeper["1"]; i++){
+        blueArr.push(scoreBlueEls[i]);
+        scoreBlueEls[i].style.display = "inline";
+    } 
+    for (let i = 0; i < scoreKeeper["-1"]; i++){
+        redArr.push(scoreRedEls[i]);
+        scoreRedEls[i].style.display = "inline";
+    } 
+    if (turn === 1){    //removes scoreBoard indicator
+        scoreRedEls[redArr.length].style.display = "none"; 
+    }
+    else if (turn === -1){
+        scoreBlueEls[blueArr.length].style.display = "none"; 
+    }
 }
 
 function createBoard(){
@@ -130,14 +159,50 @@ function createBoard(){
     for (let i = 0; i < board.length; i++){
         cardEls[i].setAttribute("team", board[i]);
         cardEls[i].setAttribute("flipped", "down")
-        cardEls[i].style.color = "black";
+        cardEls[i].style.color = "tan";
         cardEls[i].style.backgroundColor = "tan";
-        cardEls[i].innerText = wordList[i].toUpperCase();
-        if (board[i] === 1) keyEls[i].style.backgroundColor = "blue";
+        cardEls[i].style.transform = "rotateX(180deg)";
+        cardEls[i].style.transition = "transform 0.2s";
+        cardEls[i].style.transformstyle = "preserve-3d";
+        let placeAnimation = setInterval(() => {  
+            cardEls[i].style.transform = "rotateX(0deg)";
+            cardEls[i].style.transition = "transform 0.3s";
+            clearInterval(placeAnimation);
+        }, 200);
+        let generateText = setInterval(() => {  
+            cardEls[i].innerText = wordList[i].toUpperCase();
+            cardEls[i].style.color = "black";
+            clearInterval(generateText);
+        }, 300);
+        
+        if (board[i] === 1) keyEls[i].style.backgroundColor = "blue"; //sets up key
         else if (board[i] === -1) keyEls[i].style.backgroundColor = "red";
         else if (board[i] === 0) keyEls[i].style.backgroundColor = "darkgray";
         else if (board[i] === 100) keyEls[i].style.backgroundColor = "black";
     }
+}
+
+function initSounds(){
+    backgroundMusic.src = SOUNDS["backgroundMusic"];
+    victorySnd.src = SOUNDS["victory"]
+    flipSnd.src = SOUNDS["cardFlip"];
+    turnSnd.src = SOUNDS["turnSwitch"];
+    backgroundMusic.loop = true;
+    if (musicOn){
+        backgroundMusic.volume = 0.2;
+    }else{
+        backgroundMusic.volume = 0;
+    }
+    if (soundsOn){
+        victorySnd.volume = 0.6;
+        flipSnd.volume = 1;
+        turnSnd.volume = 1;
+    } else {
+        victorySnd.volume = 0;
+        flipSnd.volume = 0;
+        turnSnd.volume = 0;
+    }
+    backgroundMusic.play();
 }
 
 function render(){
@@ -154,7 +219,6 @@ function renderGrid(){
 
 function renderMessage(){
     if (!winner){
-        h2El.style.color = "black";
         if (currentHints === 0){
             if (turn === 1){
                 h2El.innerText =   `Blue Team's Turn. Enter Hint Count: `
@@ -198,6 +262,7 @@ function handleFlip(event){
         if (flipState === "down"){
             event.target.setAttribute("flipped", "up");
             event.target.style.color = "transparent";
+            flipSnd.play();
             event.target.style.transform = "rotateY(180deg)";
             event.target.style.transition = "transform 0.8s";
             event.target.style.transformstyle = "preserve-3d";
@@ -250,7 +315,7 @@ function getWinner (cardVal){
             } else
             {
                 currentHints = 0;
-                turn *= -1;
+                switchTurn();
                 render();
             }
         } else {
@@ -262,18 +327,24 @@ function getWinner (cardVal){
         else if (turn == -1) { blueArr[blueArr.length - 1].style.display = "none"; blueArr.pop();}
         if (scoreKeeper[-turn] > 0){
             currentHints = 0;
-            turn *= -1;
+            switchTurn();
             render();
         } else {
             winnerResults(-turn);
         }
     } else if (cardVal == 0){ // Clicked neutral card
         currentHints = 0;
-        turn *= -1;
+        switchTurn();
         render();
     } else { // Clicked bomb
         winnerResults(-turn);
     }
+}
+
+function switchTurn(){
+    turn *= -1;
+    turnSnd.playbackRate = 1.1;
+    turnSnd.play();
 }
 
 function winnerResults(turnPlayer){
@@ -282,5 +353,6 @@ function winnerResults(turnPlayer){
     } else if (turnPlayer == -1){
         winner = -1;
     }
+    victorySnd.play();
     render();
 }

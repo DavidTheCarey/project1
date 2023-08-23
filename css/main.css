@@ -134,3 +134,23 @@ input {
     font-size: 22px;
     margin-left: 15px;
 }
+
+#sound {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    height: 60px;
+    font-size: 40px;
+    background-color: white;
+}
+
+#music {
+    position: fixed;
+    left: 60px;
+    bottom: 0;
+    width: 60px;
+    height: 60px;
+    font-size: 40px;
+    background-color: white;
+}

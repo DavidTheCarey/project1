@@ -8,7 +8,6 @@ const CARD_VALUES = {
     redVal: 9,
     neutralVal: 7,
     bombVal: 1
-
 }
 
 const SOUNDS = {
@@ -27,9 +26,9 @@ const RND_WORDS = [
     "Knife", "Bell", "Flower", "Rock", "Slam", "Hook", "Beat", "Card", "King", "Asia",
     "Europe", "Soda", "Icecream", "Flash", "Comic", "Dream", "Dance", "Nut", "Round",
     "Organ", "Lab", "Root", "Theater", "Heart", "Torch", "China", "Band", "March",
-    "Ham", "Tooth", "Force", "Tick", "Circle", "Row", "Teacher", "Hawk", "Stadium"
+    "Ham", "Tooth", "Force", "Tick", "Circle", "Row", "Teacher", "Hawk", "Stadium",
+    "Cook", "Pin", "Racket", "Winner", "Bar", "Check", "Nail", "Mole", "Chick", "Mine"
 ]
-
 /*----- State Variables -----*/
 let board;
 const scoreKeeper = {
@@ -43,6 +42,7 @@ let blueArr = [];
 let redArr = [];
 let musicOn = true;
 let soundsOn = true;
+let infoScreen = false;
 
 /*----- Cached Elements -----*/
 const cardEls = document.querySelectorAll("#grid > div");
@@ -60,11 +60,13 @@ const scoreboardBlue = document.getElementById("blue");
 const scoreboardRed = document.getElementById("red");
 const musicBtn = document.getElementById("music");
 const soundBtn = document.getElementById("sound");
+const infoSec = document.getElementById("infosec");
+const infoBtn = document.getElementById("info");
 const flipSnd = new Audio();
 const backgroundMusic = new Audio();
 const turnSnd = new Audio();
 const victorySnd = new Audio();
-/*----- Event Listeneres -----*/
+/*----- Event Listeners -----*/
 boardEl.addEventListener("click", handleFlip, false);
 inputEl.addEventListener("input", updateHints);
 resetBtn.addEventListener("click", init);
@@ -107,11 +109,21 @@ soundBtn.addEventListener("click", () => {
     }
     initSounds();
 })
+infoBtn.addEventListener("click", () => {
+    if (infoScreen === false){
+        infoScreen = true;
+        infoSec.style.display = "inline";
+        infoBtn.style.backgroundColor = "darkgrey";
+    } else if (infoScreen === true){
+        infoScreen = false;
+        infoSec.style.display = "none";
+        infoBtn.style.backgroundColor = "white";
+    }
+})
 /*----- Functions -----*/
 init();
 
 function init(){
-    flipSnd.play();
     turn = (0.5 > Math.random() ? 1 : -1); //randomize who goes first
     setScore();
     createBoard();
@@ -139,21 +151,14 @@ function setScore(){
         redArr.push(scoreRedEls[i]);
         scoreRedEls[i].style.display = "inline";
     } 
-    if (turn === 1){    //removes scoreBoard indicator
-        scoreRedEls[redArr.length].style.display = "none"; 
-    }
-    else if (turn === -1){
-        scoreBlueEls[blueArr.length].style.display = "none"; 
-    }
+    if (turn === 1) scoreRedEls[redArr.length].style.display = "none";
+    else if (turn === -1) scoreBlueEls[blueArr.length].style.display = "none"; 
 }
 
 function createBoard(){
     let wordList = RND_WORDS;
-    if (turn === 1){
-        board = [1,1,1,1,1,1,1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,100];
-    } else if (turn === -1){
-        board = [1,1,1,1,1,1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,100];
-    }
+    if (turn === 1) board = [1,1,1,1,1,1,1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,100];
+    else if (turn === -1) board = [1,1,1,1,1,1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,100];
     board.sort(() => Math.random() - 0.5); //online forum post helped me with this
     wordList.sort(() => Math.random() - 0.5);
     for (let i = 0; i < board.length; i++){
@@ -164,17 +169,16 @@ function createBoard(){
         cardEls[i].style.transform = "rotateX(180deg)";
         cardEls[i].style.transition = "transform 0.2s";
         cardEls[i].style.transformstyle = "preserve-3d";
-        let placeAnimation = setInterval(() => {  
+        let placeAnimation = setInterval(() => {  //flip animation at start
             cardEls[i].style.transform = "rotateX(0deg)";
             cardEls[i].style.transition = "transform 0.3s";
             clearInterval(placeAnimation);
         }, 200);
-        let generateText = setInterval(() => {  
+        let generateText = setInterval(() => {  //adds text to each card
             cardEls[i].innerText = wordList[i].toUpperCase();
             cardEls[i].style.color = "black";
             clearInterval(generateText);
         }, 300);
-        
         if (board[i] === 1) keyEls[i].style.backgroundColor = "blue"; //sets up key
         else if (board[i] === -1) keyEls[i].style.backgroundColor = "red";
         else if (board[i] === 0) keyEls[i].style.backgroundColor = "darkgray";
@@ -188,11 +192,8 @@ function initSounds(){
     flipSnd.src = SOUNDS["cardFlip"];
     turnSnd.src = SOUNDS["turnSwitch"];
     backgroundMusic.loop = true;
-    if (musicOn){
-        backgroundMusic.volume = 0.2;
-    }else{
-        backgroundMusic.volume = 0;
-    }
+    if (musicOn) backgroundMusic.volume = 0.2;
+    else backgroundMusic.volume = 0;
     if (soundsOn){
         victorySnd.volume = 0.6;
         flipSnd.volume = 1;
@@ -206,15 +207,9 @@ function initSounds(){
 }
 
 function render(){
-    renderGrid();
     renderMessage();
-    renderButtons();
-}
-
-function renderGrid(){
-     keyboardEl.style.display = "none";
-
-    
+    renderInput();
+    keyboardEl.style.display = "none";
 }
 
 function renderMessage(){
@@ -227,13 +222,10 @@ function renderMessage(){
                 h2El.innerText =   `Red Team's Turn. Enter Hint Count: `
                 h2El.style.color = "Red";
             }
-        } else if (currentHints > 2){
-            h2El.innerText = `You have ${currentHints - 1} guesses left + 1 bonus guess`
-        } else if (currentHints === 2){
-            h2El.innerText = `You have ${currentHints - 1} guess left + 1 bonus guess`
-        } else if (currentHints === 1){
-            h2El.innerText = "You still have a bonus guess!";
         }
+        else if (currentHints > 2) h2El.innerText = `You have ${currentHints - 1} guesses left + 1 bonus guess`
+        else if (currentHints === 2) h2El.innerText = `You have ${currentHints - 1} guess left + 1 bonus guess`
+        else if (currentHints === 1) h2El.innerText = "You still have a bonus guess!";
     } else {
         inputEl.style.display = "none";
         if (winner === 1){
@@ -242,13 +234,12 @@ function renderMessage(){
         }
         else if (winner === -1){
             h2El.innerText = "Red Team wins the game!"
-            h2El.style.color = "Red";
-            
+            h2El.style.color = "Red";   
         }
-    }
+    }   
 }
 
-function renderButtons(){
+function renderInput(){
     if (!winner && currentHints === 0){
     inputEl.style.display = "inline";
     inputEl.value = "";
@@ -311,12 +302,10 @@ function getWinner (cardVal){
         if (scoreKeeper[turn] > 0){
             if (currentHints > 1){
                 currentHints--;
-                render();
             } else
             {
                 currentHints = 0;
                 switchTurn();
-                render();
             }
         } else {
             winnerResults(turn);
@@ -328,17 +317,16 @@ function getWinner (cardVal){
         if (scoreKeeper[-turn] > 0){
             currentHints = 0;
             switchTurn();
-            render();
         } else {
             winnerResults(-turn);
         }
     } else if (cardVal == 0){ // Clicked neutral card
         currentHints = 0;
         switchTurn();
-        render();
     } else { // Clicked bomb
         winnerResults(-turn);
     }
+    render();
 }
 
 function switchTurn(){
@@ -354,5 +342,4 @@ function winnerResults(turnPlayer){
         winner = -1;
     }
     victorySnd.play();
-    render();
 }

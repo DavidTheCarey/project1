@@ -111,7 +111,7 @@ soundBtn.addEventListener("click", () => {
 init();
 
 function init(){
-    
+    flipSnd.play();
     turn = (0.5 > Math.random() ? 1 : -1); //randomize who goes first
     setScore();
     createBoard();

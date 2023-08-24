@@ -18,8 +18,10 @@ easier each time you try! ONLY THE SPYMASTER CAN LOOK AT THE KEY. At the start o
 - If you select THE ASSASSIN (black color), you LOSE the game instantly.
 
 ## Game Images ##
-Here's some screenshots of the application!
+Here's some screenshots of the application! <br />
+Here's the start of the game.
 ![Start Of Game](img/project1-final.PNG)
+Here Red Team clicked The Assassin (the black card) and lost!
 ![End Of Game](img/project1-final-2.PNG)
 ## Technologies Used ##
 - HTML

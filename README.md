@@ -11,10 +11,7 @@ turn to give a clue and guess. The first team to contact all their agents wins t
 
 ### Gameplay ###
 Each team will designate one player to be their Spymaster. Being a Spymaster isn't a simple task but gets
-easier each time you try! At the start of your team's turn, your team's Spymaster will create a clue using just ONE WORD.
-They'll also include a number after the word, indicating how many words on the board correspond to that. For example, if
-the Spymaster gave the clue "Fruit 2", you should look through the board to see which words could match that description.
-Once you click on a card, one of four results will occur:
+easier each time you try! ONLY THE SPYMASTER CAN LOOK AT THE KEY. At the start of your team's turn, your team's Spymaster will create a clue using just ONE WORD. They'll also include a number after the word, indicating how many words on the board correspond to that. For example, if the Spymaster gave the clue "Fruit 2", you should look through the board to see which words could match that description. Once you click on a card, one of four results will occur:
 - If you select a card with YOUR TEAM'S COLOR, you contact your agent and can continue guessing.
 - If you select a card with the ENEMY TEAM'S COLOR, their agent is contacted and you can no longer guess.
 - If you select a NEUTRAL CARD (gray color), you can no longer guess.
@@ -22,14 +19,14 @@ Once you click on a card, one of four results will occur:
 
 ## Game Images ##
 Here's some screenshots of the application!
-![Start Of Game](project1-final.PNG)
-![End Of Game](project1-final-2.PNG)
+![Start Of Game](img/project1-final.PNG)
+![End Of Game](img/project1-final-2.PNG)
 ## Technologies Used ##
 - HTML
 - CSS
 - JavaScript
 ## Getting Started ##
-To play CODENAMES, click this link! [Play CODENAMES!](https://davidthecarey.github.io/project1/)
+To play CODENAMES, click this link! [Play CODENAMES!](https://davidthecarey.github.io/project1/) <br />
 If you've never played CODENAMES before, I'd recommend reading the Description section above.
 ## Next Steps ##
 There's a few changes I would like to implement if I had more experience and time with this project. The sounds and animations
